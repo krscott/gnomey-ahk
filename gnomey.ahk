@@ -22,6 +22,9 @@ GetMouseDragCoords(&x, &y) {
         x := 15
     } else if WinActive("ahk_exe firefox.exe") {
         x := 15
+    } else if WinActive("ahk_class Chrome_WidgetWin_1") {
+        x := 200
+        y := 30
     }
 }
 
