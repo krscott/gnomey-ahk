@@ -34,6 +34,7 @@ GetMouseDragCoords(&x, &y) {
 }
 
 $#LButton:: {
+
     MouseGetPos &origin_x, &origin_y, &window
     WinActivate window
 
@@ -61,7 +62,12 @@ $LWin:: {
 $LWin up:: {
     global WIN_USED
 
-    if !WIN_USED {
+    if WIN_USED {
+        ; Send an no-op hotkey to consume the win event.
+        ; As far as I know, Win+J does nothing. Win+O, Win+Y are also contenders.
+        ; TODO This is not necessary when Window Spy is open (even if minimized). why??
+        Send("j")
+    } else {
         Send("{Tab}")
     }
     Send("{LWin up}")
@@ -107,11 +113,14 @@ $LWin up:: {
 ~#*0:: ConsumeWin()
 ~#*Tab:: ConsumeWin()
 
+; #HotIf WinExist("ahk_exe StartMenuExperienceHost.exe")
+; $LWin:: {
+;     ConsumeWin()
+;     Send("{Esc}")
+; }
+
 #HotIf WinActive('ahk_class XamlExplorerHostIslandWindow')
-$LWin:: {
-    ConsumeWin()
-    Send("{Esc}")
-}
+$LWin::Esc
 
 StartWinSearch() {
     Send("{Esc}{LWin}")
