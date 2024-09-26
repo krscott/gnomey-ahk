@@ -9,6 +9,8 @@ WIN_USED := false
 #HotIf !WinActive('ahk_class XamlExplorerHostIslandWindow')
 
 GetMouseDragCoords(&x, &y) {
+    ; Handle windows with non-standard drag bars
+
     x := 64
     y := 15
 
@@ -17,6 +19,8 @@ GetMouseDragCoords(&x, &y) {
         WinGetPos , , &w
         x := w - 200
     } else if WinActive("ahk_exe Code.exe") {
+        x := 15
+    } else if WinActive("ahk_exe firefox.exe") {
         x := 15
     }
 }
