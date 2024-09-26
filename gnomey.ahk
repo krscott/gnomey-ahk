@@ -32,10 +32,16 @@ $#LButton:: {
     global WIN_USED
     WIN_USED := true
 
-    MouseGetPos &origin_x, &origin_y, &win_title
-    WinActivate win_title
-    WinRestore win_title
-    WinGetPos &win_x, &win_y, , , win_title
+    MouseGetPos &origin_x, &origin_y, &window
+
+    ; Check if clicking on Desktop
+    if WinGetClass(window) == "WorkerW" {
+        return
+    }
+
+    WinActivate window
+    WinRestore window
+    WinGetPos &win_x, &win_y, , , window
 
     GetMouseDragCoords(&x, &y)
     MouseClick "Left", x, y, , , "D"
