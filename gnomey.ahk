@@ -1,12 +1,17 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance
-; #WinActivateForce
+#WinActivateForce
 
 CoordMode "Mouse", "Window"
 
 WIN_USED := false
 
 #HotIf !WinActive('ahk_class XamlExplorerHostIslandWindow')
+
+ConsumeWin() {
+    global WIN_USED
+    WIN_USED := true
+}
 
 GetMouseDragCoords(&x, &y) {
     ; Handle windows with non-standard drag bars
@@ -29,23 +34,21 @@ GetMouseDragCoords(&x, &y) {
 }
 
 $#LButton:: {
-    global WIN_USED
-    WIN_USED := true
-
     MouseGetPos &origin_x, &origin_y, &window
+    WinActivate window
 
     ; Check if clicking on Desktop
     if WinGetClass(window) == "WorkerW" {
         return
     }
 
-    WinActivate window
     WinRestore window
     WinGetPos &win_x, &win_y, , , window
 
     GetMouseDragCoords(&x, &y)
     MouseClick "Left", x, y, , , "D"
     while GetKeyState("LButton", "P") {
+        ConsumeWin()
     }
     MouseClick , , , , , "U"
     MouseMove origin_x, origin_y
@@ -64,11 +67,6 @@ $LWin up:: {
     Send("{LWin up}")
 
     WIN_USED := false
-}
-
-ConsumeWin() {
-    global WIN_USED
-    WIN_USED := true
 }
 
 ~#*a:: ConsumeWin()
@@ -110,7 +108,10 @@ ConsumeWin() {
 ~#*Tab:: ConsumeWin()
 
 #HotIf WinActive('ahk_class XamlExplorerHostIslandWindow')
-$LWin::Esc
+$LWin:: {
+    ConsumeWin()
+    Send("{Esc}")
+}
 
 StartWinSearch() {
     Send("{Esc}{LWin}")
