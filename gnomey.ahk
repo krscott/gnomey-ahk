@@ -111,6 +111,10 @@ $LWin up:: {
 ~#*8:: ConsumeWin()
 ~#*9:: ConsumeWin()
 ~#*0:: ConsumeWin()
+~#*up:: ConsumeWin()
+~#*down:: ConsumeWin()
+~#*left:: ConsumeWin()
+~#*right:: ConsumeWin()
 ~#*Tab:: ConsumeWin()
 
 ; #HotIf WinExist("ahk_exe StartMenuExperienceHost.exe")
@@ -124,6 +128,7 @@ $LWin::Esc
 
 StartWinSearch() {
     Send("{Esc}{LWin}")
+    Sleep(10)
     Send(A_ThisHotkey)
 }
 
